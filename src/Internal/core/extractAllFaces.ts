@@ -17,7 +17,7 @@ type CelebrityScoreType = Array<number>;
 type CelebrityScoreMapType = Record<string, CelebrityScoreType>;
 let celebrityScoreMap: CelebrityScoreMapType = {};
 
-const scoreAllFaces = async (): Promise<void> => {
+const extractAllFaces = async (): Promise<void> => {
   try {
     const analyzer: Analyzer = new Analyzer();
     await analyzer.loadModels();
@@ -27,35 +27,41 @@ const scoreAllFaces = async (): Promise<void> => {
     const celebImageMap: CelebrityImagesMapType = reader.getImages(
       CELEB_IMAGES_PATH,
       celebrityFolderNames,
-      'extracted'
+      'training'
     );
 
-    console.time('Scoring');
-    await reader.executeEachCelebImageBatch(
+    console.time('extracting');
+    reader.executeEachCelebImageBatch(
       celebrityFolderNames,
       celebImageMap,
-      scoreCelebrity,
+      extractCelebrity,
       analyzer
     );
 
-    console.timeEnd('Scoring');
-
-    utils.saveJson(celebrityScoreMap, `${CELEB_IMAGES_PATH}/../scores`, 'celebrityScores.json');
+    console.timeEnd('extracting');
   } catch (err) {
     console.log(err);
   }
 };
-module.exports = scoreAllFaces;
+module.exports = extractAllFaces;
 
-const scoreCelebrity = async (celebName: string, imageNames: Array<string>, analyzer: Analyzer) => {
-  let descriptors = [];
+const extractCelebrity = async (
+  celebName: string,
+  imageNames: Array<string>,
+  analyzer: Analyzer
+) => {
+  for (let i = 0; i < imageNames.length; i++) {
+    const imageName = imageNames[i];
+    const imagePath = path.normalize(`${CELEB_IMAGES_PATH}/${celebName}/training/${imageName}`);
 
-  for (const imageName of imageNames) {
-    const imagePath = path.normalize(`${CELEB_IMAGES_PATH}/${celebName}/extracted/${imageName}`);
+    const { alignedRect } = await analyzer.getFaceAndLandmarks(imagePath);
 
-    const descriptor = await analyzer.getRawFaceDescriptor(imagePath);
-    descriptors.push(descriptor);
+    const extractedFace = await analyzer.extractFace(imagePath, alignedRect);
+
+    utils.saveFile(
+      `${celebName}__extracted__${i}.jpg`,
+      `${CELEB_IMAGES_PATH}/${celebName}/extracted`,
+      extractedFace[0].toBuffer('image/jpeg')
+    );
   }
-
-  celebrityScoreMap[celebName] = vector.sum(descriptors);
 };
