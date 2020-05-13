@@ -1,0 +1,17 @@
+{
+  "name": "celebritylookalike",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "score-all": "ts-node -e \"require('./src/Internal/core/scoreAllFaces.ts')()\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^1.7.4",
+    "canvas": "^2.6.1",
+    "face-api.js": "^0.22.2"
+  }
+}
