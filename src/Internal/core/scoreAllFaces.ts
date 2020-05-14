@@ -57,5 +57,5 @@ const scoreCelebrity = async (celebName: string, imageNames: Array<string>, anal
     descriptors.push(descriptor);
   }
 
-  celebrityScoreMap[celebName] = vector.sum(descriptors);
+  celebrityScoreMap[celebName] = vector.average(descriptors);
 };

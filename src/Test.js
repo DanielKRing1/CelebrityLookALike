@@ -5,7 +5,7 @@
  * *****************/
 // import nodejs bindings to native tensorflow,
 // not required, but will speed up things drastically (python required)
-require('@tensorflow/tfjs-node');
+// require('@tensorflow/tfjs-node');
 // implements nodejs wrappers for HTMLCanvasElement, HTMLImageElement, ImageData
 const faceapi = require('face-api.js');
 const canvas = require('canvas');

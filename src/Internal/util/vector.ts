@@ -1,4 +1,9 @@
-const sum = (listOfLists: Array<Array<number>>): Array<number> => {
+function average(listOfLists: Array<Array<number>>): Array<number> {
+  const s = sum(listOfLists);
+
+  return divide(s, listOfLists.length);
+}
+function sum(listOfLists: Array<Array<number>>): Array<number> {
   let sum = listOfLists[0];
 
   for (let i = 1; i < listOfLists.length; i++) {
@@ -6,22 +11,35 @@ const sum = (listOfLists: Array<Array<number>>): Array<number> => {
   }
 
   return sum;
-};
-const add2 = (listA: Array<number>, listB: Array<number>): Array<number> =>
-  listA.map((a: number, i: number) => a + listB[i]);
+}
+function divide(vector: Array<number>, scalar: number): Array<number> {
+  return vector.map((val: number) => val / scalar);
+}
+
+function add2(listA: Array<number>, listB: Array<number>): Array<number> {
+  return listA.map((a: number, i: number) => a + listB[i]);
+}
 
 module.exports = {
   add2,
+  average,
+  divide,
   sum,
 };
 
-// console.log(vector.add2([1, 2, 3, 4, 5], [6, 7, 8, 9, 10]));
+// console.log(add2([1, 2, 3, 4, 5], [6, 7, 8, 9, 10]));
 // console.log(
-//   vector.sum([
+//   sum([
 //     [1, 2, 3, 4, 5],
 //     [6, 7, 8, 9, 10],
 //     [11, 12, 13, 14, 15],
 //   ])
 // );
-// [7, 9, 11, 13, 15]
-// [(18, 21, 24, 27, 30)];
+// console.log(divide([1, 2, 3, 4, 5], 5));
+// console.log(
+//   average([
+//     [1, 2, 3, 4, 5],
+//     [6, 7, 8, 9, 10],
+//     [11, 12, 13, 14, 15],
+//   ])
+// );
